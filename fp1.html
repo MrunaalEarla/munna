@@ -1,0 +1,974 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ElectroEmporium</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(to right, #1e3c72, #2a5298);
+            color: #fff;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        header {
+            background-color: rgba(0, 0, 0, 0.7);
+            color: white;
+            padding: 15px 0;
+            text-align: center;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+        }
+
+        .logo h1 {
+            font-family: 'Helvetica', sans-serif;
+            font-size: 2.5rem;
+            font-weight: bold;
+            margin: 0;
+        }
+
+        nav ul {
+            list-style: none;
+            padding: 0;
+            text-align: center;
+            margin-top: 15px;
+        }
+
+        nav ul li {
+            display: inline-block;
+            margin: 0 15px;
+        }
+
+        nav ul li a {
+            color: #fff;
+            text-decoration: none;
+            font-weight: bold;
+            font-size: 18px;
+            transition: color 0.3s ease;
+        }
+
+        nav ul li a:hover {
+            color: #ff8c00;
+        }
+
+        .main-container {
+            margin: 20px;
+            padding: 20px;
+            border-radius: 8px;
+            background-color: #fff;
+            color: #333;
+            display: none;
+        }
+
+        .main-container.active {
+            display: block;
+        }
+
+        .category-container, .brand-container {
+            display: flex;
+            justify-content: space-around;
+            margin-bottom: 20px;
+        }
+
+        .category-item, .brand-item, .sub-category-item, .brand-model-item {
+            background-color: #fff;
+            padding: 20px;
+            border: 1px solid #ddd;
+            width: 200px;
+            text-align: center;
+            cursor: pointer;
+            border-radius: 8px;
+            transition: transform 0.3s ease, background-color 0.3s ease;
+            margin-bottom: 20px;
+        }
+
+        .category-item:hover, .brand-item:hover, .sub-category-item:hover, .brand-model-item:hover {
+            background-color: #f0f0f0;
+            transform: scale(1.05);
+        }
+
+        .category-item h3, .brand-item h3, .sub-category-item h3, .brand-model-item h3, .brand-model-item p {
+            font-size: 1.2rem;
+            margin: 0;
+            color: #333;
+        }
+        .brand-item h3, .sub-category-item h3 {
+            font-size: 1.5rem;
+        }
+
+        .category-item img, .brand-item img, .sub-category-item img, .brand-model-item img {
+            width: 100%;
+            height: auto;
+            border-radius: 8px;
+            margin-bottom: 10px;
+        }
+
+        .sub-category-container, .brand-model-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-around;
+        }
+
+        .brand-page {
+            display: none;
+        }
+
+        .brand-page.active {
+            display: block;
+        }
+
+
+        footer {
+            background-color: rgba(0, 0, 0, 0.7);
+            color: white;
+            text-align: center;
+            padding: 10px;
+            position: fixed;
+            width: 100%;
+            bottom: 0;
+        }
+
+        .social-media-links {
+            margin-top: 10px;
+        }
+
+        .social-media-links a {
+            color: #fff;
+            text-decoration: none;
+            margin: 0 10px;
+            font-size: 1.2rem;
+        }
+
+        .social-media-links a:hover {
+            color: #ff8c00;
+        }
+
+        button, .brand-item button, .sub-category-item button, .brand-model-item button {
+            background-color: #ff8c00;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            font-size: 1rem;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            margin-top: 10px;
+        }
+
+        button:hover, .brand-item button:hover, .sub-category-item button:hover, .brand-model-item button:hover {
+            background-color: #e07b00;
+        }
+
+        input, label {
+            font-size: 1rem;
+            margin-bottom: 10px;
+            width: 100%;
+            padding: 10px;
+            border-radius: 5px;
+            border: 1px solid #ddd;
+            margin-bottom: 15px;
+        }
+
+        input[type="email"], input[type="password"] , input[type="text"], input[type="number"]{
+            background-color: #f9f9f9;
+        }
+
+        #checkout-btn {
+            width: auto;
+        }
+
+        .cart-container {
+            background-color: white;
+            padding: 20px;
+            margin: 20px;
+            border-radius: 8px;
+            width: 90%;
+            max-width: 800px;
+            margin: 20px auto;
+        }
+
+        .cart-item {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 15px;
+            font-size: 18px;
+            align-items: center; /* Align items vertically in the center */
+        }
+
+        .cart-item p {
+            margin: 0;
+        }
+
+        .cart-item input {
+            width: 60px;
+            padding: 5px;
+            font-size: 16px;
+            margin-right: 10px;
+        }
+
+        .cart-item button {
+            background-color: #d32f2f;
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            cursor: pointer;
+            font-size: 14px;
+            border-radius: 5px;
+        }
+
+        .cart-item button:hover {
+            background-color: #b71c1c;
+        }
+
+        .total-amount {
+            display: flex;
+            justify-content: space-between;
+            font-size: 20px;
+            margin-top: 20px;
+            font-weight: bold;
+        }
+
+        .total-amount span {
+            font-size: 22px;
+            color: #2874f0;
+        }
+
+        /* Payment methods */
+        .payment-method {
+            display: flex;
+            justify-content: space-around;
+            margin-bottom: 20px;
+        }
+
+        .payment-method button {
+            background-color: #2874f0;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 5px;
+            font-size: 1rem;
+        }
+
+        .payment-method button:hover {
+            background-color: #1f5fa0;
+        }
+
+        .payment-status {
+            font-size: 1.5rem;
+            font-weight: bold;
+            margin-top: 20px;
+        }
+
+        .order-history {
+            margin-top: 20px;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+        }
+
+        .order-history .order-item {
+            margin-bottom: 15px;
+        }
+
+        /* Checkout Form Styles */
+        .checkout-form {
+            display: none; /* Hidden by default */
+            margin-top: 20px;
+            padding: 20px;
+            background-color: #f9f9f9;
+            border-radius: 8px;
+            color: #333;
+        }
+
+        .checkout-form.active {
+            display: block; /* Show when active */
+        }
+
+        .checkout-form h3 {
+            margin-top: 0;
+        }
+
+        /* Success Message Style */
+        .add-to-cart-message {
+            display: none;
+            color: green;
+            margin-left: 10px;
+            font-size: 0.9rem;
+        }
+
+        .add-to-cart-message.active {
+            display: inline;
+        }
+
+        /* Media Query for responsiveness */
+        @media (max-width: 768px) {
+            body {
+                height: auto; /* Adjust height for smaller screens */
+            }
+            header {
+                padding: 10px 0; /* Reduce header padding */
+            }
+            .logo h1 {
+                font-size: 2rem; /* Reduce logo font size */
+            }
+            nav ul li {
+                margin: 0 10px; /* Reduce nav list item margin */
+            }
+            nav ul li a {
+                font-size: 16px; /* Reduce nav link font size */
+            }
+            .category-container, .brand-container {
+                flex-direction: column; /* Stack categories on smaller screens */
+                align-items: center; /* Center align categories */
+            }
+            .category-item, .brand-item, .sub-category-item, .brand-model-item {
+                width: 90%; /* Make category items wider on smaller screens */
+                margin-bottom: 15px; /* Add margin between stacked categories */
+            }
+            .sub-category-item {
+                width: 45%; /* Adjust sub-category item width for smaller screens, two items per row */
+                margin-bottom: 15px;
+            }
+            .cart-container {
+                width: 95%; /* Cart container wider on small screens */
+                margin: 10px auto; /* Adjust margins */
+                padding: 15px; /* Reduce padding in cart container */
+            }
+            .cart-item {
+                font-size: 16px; /* Reduce font size in cart items */
+                flex-direction: column; /* Stack cart item details */
+                align-items: flex-start; /* Align items to start in stacked layout */
+            }
+            .cart-item p {
+                margin-bottom: 5px; /* Add a bit of margin below product name in cart */
+            }
+            .total-amount {
+                font-size: 18px; /* Reduce total amount font size */
+            }
+            .total-amount span {
+                font-size: 20px; /* Reduce total amount value font size */
+            }
+            .payment-method {
+                flex-direction: column; /* Stack payment buttons on smaller screens */
+                align-items: center;
+            }
+            .payment-method button {
+                margin-bottom: 10px; /* Add margin between stacked payment buttons */
+                width: 90%; /* Make payment buttons wider on smaller screens */
+            }
+            .payment-status {
+                font-size: 1.2rem; /* Reduce payment status font size */
+            }
+            footer {
+                padding: 8px; /* Reduce footer padding */
+                font-size: 0.9rem; /* Reduce footer font size */
+            }
+            .social-media-links a {
+                font-size: 1rem; /* Reduce social media link font size */
+            }
+        }
+    </style>
+</head>
+<body>
+<header>
+    <div class="logo">
+        <h1>ElectroEmporium</h1>
+    </div>
+    <nav>
+        <ul>
+            <li><a href="#" onclick="showSection('home')"><i class="fas fa-home"></i>Home</a></li>
+            <li><a href="#" onclick="showSection('cart')"><i class="fas fa-shopping-cart"></i>Cart</a></li>
+            <li><a href="#" onclick="showSection('about')"><i class="fas fa-info-circle"></i>About</a></li>
+            <li><a href="#" onclick="showSection('login')"><i class="fas fa-sign-in-alt"></i>Login</a></li>
+            <li><a href="#" onclick="showSection('signup')"><i class="fas fa-user-plus"></i>Sign Up</a></li>
+            <li><a href="#" onclick="showSection('payment')"><i class="fas fa-credit-card"></i>Payment</a></li>
+            <li><a href="#" onclick="showSection('orderHistory')"><i class="fas fa-box"></i>Order History</a></li>
+        </ul>
+    </nav>
+</header>
+
+<section id="home" class="main-container active">
+    <h2>Welcome to ElectroEmporium</h2>
+    <p>Shop for a wide variety of products from Electronic categories.</p>
+
+    <h3>Product Categories</h3>
+    <div class="category-container">
+        <div class="category-item" onclick="showBrands('mobiles')">
+            <img src= https://media.istockphoto.com/id/1322157897/photo/close-up-of-a-businessman-hand-holding-a-smartphone-white-screen-is-blank-the-background-is.jpg?s=612x612&w=0&k=20&c=-frdOPQrsY8JmrQxYWUcwmoLZFVSM3QC3d4j2KVLdzI= alt="Mobiles">
+            <h3>Mobiles</h3>
+        </div>
+        <div class="category-item" onclick="showSubCategories('electronics')">
+            <img src= https://media.istockphoto.com/id/1372577388/photo/old-electronic-devices-on-a-dark-background-the-concept-of-recycling-and-disposal-of.jpg?s=612x612&w=0&k=20&c=RGm3eCA76Y_IJJYGCLWS9acSR39Gb7iqsC_DIhJyG2g=  alt="Electronics">
+            <h3>Electronics</h3>
+        </div>
+        <div class="category-item" onclick="showSubCategories('appliances')">
+            <img src= https://media.istockphoto.com/id/1446609885/photo/3d-illustration.jpg?s=612x612&w=0&k=20&c=CyPRMZ7rN8jbbKWkdNR1Gn486jlwfB8xHgAJtuVZp1I= alt="appliances">
+            <h3>Appliances</h3>
+        </div>
+    </div>
+
+    <div id="sub-category-list" class="sub-category-container">
+        </div>
+
+    <div id="brand-list" class="brand-container brand-page">
+    </div>
+
+    <div id="model-list" class="brand-model-container brand-page">
+    </div>
+
+</section>
+
+<section id="cart" class="main-container">
+    <h2>Your Shopping Cart</h2>
+    <div id="cart-items">
+        </div>
+    <div class="total-amount">
+        <span>Total Amount:</span>
+        <span id="total-amount">₹ 0</span>
+    </div>
+
+    <div id="checkoutFormSection" class="checkout-form">
+        <h3>Enter Your Details</h3>
+        <form id="checkout-details-form">
+            <label for="name">Full Name:</label>
+            <input type="text" id="name" name="name" required><br>
+            <label for="address">Address:</label>
+            <input type="text" id="address" name="address" required><br>
+            <label for="pincode">Pincode:</label>
+            <input type="number" id="pincode" name="pincode" required><br>
+            <label for="city">City:</label>
+            <input type="text" id="city" name="city" required><br>
+            <button type="submit" id="checkout-btn">Proceed to Payment</button>
+        </form>
+    </div>
+    <button id="proceed-checkout-btn" onclick="showCheckoutForm()">Proceed to Checkout</button>
+</section>
+
+<section id="payment" class="main-container">
+    <h2>Choose Payment Method</h2>
+    <div class="payment-method">
+        <button onclick="processPayment('Credit Card')">Credit Card</button>
+        <button onclick="processPayment('Debit Card')">Debit Card</button>
+        <button onclick="processPayment('UPI')">UPI</button>
+        <button onclick="processPayment('COD')">Cash On Delivery (COD)</button>
+    </div>
+    <div class="payment-status" id="payment-status"></div>
+</section>
+
+<section id="orderHistory" class="main-container">
+    <h2>Order History</h2>
+    <div id="order-history-list" class="order-history">
+        </div>
+</section>
+
+<section id="about" class="main-container">
+    <h2>About Us</h2>
+    <p>Welcome to our e-commerce platform! We offer a wide range of products to meet your needs. Shop with us for quality products and excellent customer service.</p>
+    <p>Contact us at: <a href="mailto:info@electroemporium.com">info@electroemporium.com</a></p>
+</section>
+
+<section id="login" class="main-container">
+    <h2>Login</h2>
+    <form id="loginForm">
+        <label for="loginEmail">Email:</label>
+        <input type="email" id="loginEmail" name="loginEmail" required><br>
+        <label for="loginPassword">Password:</label>
+        <input type="password" id="loginPassword" name="loginPassword" required><br>
+        <button type="submit">Login</button>
+    </form>
+</section>
+
+<section id="signup" class="main-container">
+    <h2>Sign Up</h2>
+    <form id="signupForm">
+        <label for="signupName">Full Name:</label>
+        <input type="text" id="signupName" name="signupName" required><br>
+        <label for="signupEmail">Email:</label>
+        <input type="email" id="signupEmail" name="signupEmail" required><br>
+        <label for="signupPassword">Password:</label>
+        <input type="password" id="signupPassword" name="signupPassword" required><br>
+        <button type="submit">Sign Up</button>
+    </form>
+</section>
+
+<footer>
+    <p>&copy; 2025 ElectroEmporium. All Rights Reserved.</p>
+    <div class="social-media-links">
+        <a href="#">Facebook</a>
+        <a href="#">Twitter</a>
+        <a href="#">Instagram</a>
+    </div>
+</footer>
+
+<script>
+    let cart = []; // Array to store cart items
+    let orderHistory = []; // Array to store order history
+    let currentCategory = '';
+    let currentSubCategory = '';
+
+    const subCategoriesData = {
+        mobiles: {
+            brands: [
+                { name: 'Apple', logo: 'https:/upload.wikimedia.org/wikipedia/commons/thumb/f/fa/Apple_logo_black.svg/200px-Apple_logo_black.svg.png'  , models: [
+                        { model: 'iPhone 14', price: 79999 },
+                        { model: 'iPhone 15', price: 89999 }
+                    ] },
+                { name: 'Samsung', logo: 'https://images.samsung.com/is/image/samsung/assets/global/about-us/brand/logo/300_186_3.png?$568_N_PNG$' , models: [
+                        { model: 'Galaxy S23', price: 74999 },
+                        { model: 'Galaxy S24', price: 84999 }
+                    ] },
+                { name: 'OnePlus', logo: 'https://upload.wikimedia.org/wikipedia/commons/thumb/f/f8/OP_LU_Reg_1L_RGB_red_copy-01.svg/520px-OP_LU_Reg_1L_RGB_red_copy-01.svg.png', models: [
+                        { model: '11', price: 54999 },
+                        { model: '12', price: 64999 }
+                    ] },
+                { name: 'Google', logo: 'https://upload.wikimedia.org/wikipedia/commons/thumb/2/2f/Google_2015_logo.svg/480px-Google_2015_logo.svg.png', models: [
+                        { model: 'Pixel 9 pro', price: 129999 },
+                        { model: 'pixel 8 pro', price: 89999 },
+                    ] }
+            ]
+        },
+        electronics: {
+            subcategories: [
+                { name: 'Laptops',brands: [
+                        { name: 'Dell', logo: 'https://upload.wikimedia.org/wikipedia/commons/thumb/1/18/Dell_logo_2016.svg/280px-Dell_logo_2016.svg.png', models: [
+                                { model: 'XPS 13', price: 99999 },
+                                { model: 'Inspiron 15', price: 59999 }
+                            ] },
+                        { name: 'HP', logo: 'https://upload.wikimedia.org/wikipedia/commons/thumb/a/ad/HP_logo_2012.svg/260px-HP_logo_2012.svg.png', models: [
+                                { model: 'Spectre x360', price: 109999 },
+                                { model: 'Pavilion 14', price: 69999 }
+                            ] },
+                        { name: 'Apple', logo: 'https://upload.wikimedia.org/wikipedia/commons/thumb/f/fa/Apple_logo_black.svg/200px-Apple_logo_black.svg.png', models: [
+                                { model: 'MacBook Air M2', price: 119999 },
+                                { model: 'MacBook Pro 14', price: 199999 }
+                            ] },
+                        { name: 'Lenovo', logo: 'https://upload.wikimedia.org/wikipedia/commons/thumb/c/c9/Lenovo_%282015%29.svg/440px-Lenovo_%282015%29.svg.png', models: [
+                                { model: 'ThinkPad X1 Carbon', price: 129999 },
+                                { model: 'IdeaPad Slim 5', price: 79999 }
+                            ] }
+                    ] },
+                { name: 'Cameras', brands: [
+                        { name: 'Canon', logo: 'https://upload.wikimedia.org/wikipedia/commons/thumb/0/0a/Canon_wordmark.svg/480px-Canon_wordmark.svg.png', models: [
+                                { model: 'EOS 200D', price: 44999 },
+                                { model: 'EOS 90D', price: 99999 }
+                            ] },
+                        { name: 'Sony', logo: 'https://upload.wikimedia.org/wikipedia/commons/thumb/c/ca/Sony_logo.svg/500px-Sony_logo.svg.png', models: [
+                                { model: 'Alpha 7 III', price: 149999 },
+                                { model: 'Alpha 6400', price: 79999 }
+                            ] }
+                    ] },
+                { name: 'Headphones', brands: [
+                        { name: 'Sony', logo: 'https://upload.wikimedia.org/wikipedia/commons/thumb/c/ca/Sony_logo.svg/500px-Sony_logo.svg.png', models: [
+                                { model: 'WH-1000XM5', price: 29990 },
+                                { model: 'WH-CH520', price: 4990 }
+                            ] },
+                        { name: 'Bose', logo: 'https://upload.wikimedia.org/wikipedia/commons/thumb/0/0c/Bose_logo.svg/440px-Bose_logo.svg.png', models: [
+                                { model: 'QuietComfort 45', price: 24990 },
+                                { model: 'SoundLink Around-Ear II', price: 14990 }
+                            ] }
+                    ] },
+                { name: 'Wall Adaptors', brands: [
+                        { name: 'Stuffcool', logo: 'https://www.stuffcool.com/cdn/shop/files/Stuffcool_Logo_Small_d466a3c7-a95c-4b47-ad1d-a50b34941a0f.png?v=1724155394&width=240', models: [
+                                { model: '50W PD Charger', price: 1299 },
+                                { model: '30W PD Charger', price: 999 }
+                            ] },
+                        { name: 'Anker', logo: 'https://upload.wikimedia.org/wikipedia/commons/thumb/a/a4/Anker_Innovations_Co._Ltd._Logo.png/440px-Anker_Innovations_Co._Ltd._Logo.png', models: [
+                                { model: 'PowerPort III 65W', price: 2499 },
+                                { model: 'PowerPort PD Nano', price: 1499 }
+                            ] }
+                    ] },
+                { name: 'Cables', brands: [
+                        { name: 'boAt', logo: 'https://www.boat-lifestyle.com/cdn/shop/files/boAt_logo_black_24889e30-925c-4185-a028-9fef497a8e44.svg?v=1732879339', models: [
+                                { model: 'Type-C Cable', price: 499 },
+                                { model: 'Micro-USB Cable', price: 399 }
+                            ] },
+                        { name: 'AmazonBasics', logo: 'https://m.media-amazon.com/images/S/al-na-9d5791cf-3faf/99964ea0-9076-4333-9e38-39a525bb20c8._CR0%2C0%2C1000%2C1000_SX1000_.png', models: [
+                                { model: 'Braided Type-C Cable', price: 799 },
+                                { model: 'Braided Lightning Cable', price: 999 }
+                            ] }
+                    ] },
+                { name: 'Mouse', brands: [
+                        { name: 'Logitech', logo: 'https://www.logitech.com/content/dam/logitech/en/nav/brand-logos/logitechg.svg', models: [
+                                { model: 'MX Master 3S', price: 9995 },
+                                { model: 'M100', price: 499 }
+                            ] },
+                        { name: 'Dell', logo: 'https://upload.wikimedia.org/wikipedia/commons/thumb/1/18/Dell_logo_2016.svg/280px-Dell_logo_2016.svg.png', models: [
+                                { model: 'MS3220W', price: 2499 },
+                                { model: 'WM118', price: 799 }
+                            ] }
+                    ] },
+                { name: 'Keyboard', brands: [
+                        { name: 'Logitech', logo: 'https://www.logitech.com/content/dam/logitech/en/nav/brand-logos/logitechg.svg', models: [
+                                { model: 'MX Keys', price: 12995 },
+                                { model: 'K120', price: 795 }
+                            ] },
+                        { name: 'HP', logo: 'https://upload.wikimedia.org/wikipedia/commons/thumb/a/ad/HP_logo_2012.svg/260px-HP_logo_2012.svg.png', models: [
+                                { model: 'Wireless Elite v2', price: 4999 },
+                                { model: '100 Wired Keyboard', price: 999 }
+                            ] }
+                    ] },
+                { name: 'Printers', brands: [
+                        { name: 'HP', logo: 'https://upload.wikimedia.org/wikipedia/commons/thumb/a/ad/HP_logo_2012.svg/260px-HP_logo_2012.svg.png', models: [
+                                { model: 'DeskJet 2720', price: 5999 },
+                                { model: 'LaserJet Pro M1136', price: 12999 }
+                            ] },
+                        { name: 'Canon', logo: 'https://in.canon/assets/brand/logo-300-002e45a4aec98fd92899838da9d5560f.png', models: [
+                                { model: 'Pixma G3000', price: 14999 },
+                                { model: 'Pixma TS3370', price: 7999 }
+                            ] }
+                    ] },
+                { name: 'Monitors', brands: [
+                        { name: 'Dell', logo: 'https://upload.wikimedia.org/wikipedia/commons/thumb/1/18/Dell_logo_2016.svg/280px-Dell_logo_2016.svg.png', models: [
+                                { model: 'UltraSharp U2722DE', price: 39999 },
+                                { model: 'SE2422H', price: 12999 }
+                            ] },
+                        { name: 'LG', logo: 'https://www.lg.com/content/dam/lge/common/logo/logo-lg-100-44.svg', models: [
+                                { model: '27GN800-B', price: 29999 },
+                                { model: '24MP60G', price: 14999 }
+                            ] }
+                    ] }
+            ]
+        },
+        appliances: {
+            subcategories: [
+                { name: 'Air Conditioners', brands: [
+                        { name: 'LG', logo: 'https://www.lg.com/content/dam/lge/common/logo/logo-lg-100-44.svg', models: [
+                                { model: 'AI Dual Inverter', price: 55000 },
+                                { model: 'Split AC 1.5 Ton', price: 35000 }
+                            ] },
+                        { name: 'Samsung', logo: 'https://upload.wikimedia.org/wikipedia/commons/thumb/b/b7/Samsung_Black_icon.svg/520px-Samsung_Black_icon.svg.png', models: [
+                                { model: '3 Star Inverter AC', price: 40000 },
+                                { model: '5 Star Inverter AC', price: 60000 }
+                            ] }
+                    ] },
+                { name: 'Refrigerators', brands: [
+                        { name: 'Samsung', logo: 'https://upload.wikimedia.org/wikipedia/commons/thumb/b/b7/Samsung_Black_icon.svg/520px-Samsung_Black_icon.svg.png', models: [
+                                { model: 'Double Door 300L', price: 30000 },
+                                { model: 'Side-by-Side 500L', price: 60000 }
+                            ] },
+                        { name: 'Whirlpool', logo: 'https://whirlpoolindia.vtexassets.com/assets/vtex/assets-builder/whirlpoolindia.whirlpoolindia-store/0.0.33/images/logo-dark___67dae163edc2d81a62d0b362bf3dc1d8.svg', models: [
+                                { model: 'Single Door 200L', price: 15000 },
+                                { model: 'French Door 600L', price: 70000 }
+                            ] }
+                    ] },
+                { name: 'Televisions', brands: [
+                        { name: 'Sony', logo: 'https://upload.wikimedia.org/wikipedia/commons/thumb/c/ca/Sony_logo.svg/500px-Sony_logo.svg.png', models: [
+                                { model: 'Bravia 4K 55 inch', price: 50000 },
+                                { model: 'Bravia OLED 65 inch', price: 150000 }
+                            ] },
+                        { name: 'LG', logo: 'https://www.lg.com/content/dam/lge/common/logo/logo-lg-100-44.svg', models: [
+                                { model: 'OLED 55 inch', price: 80000 },
+                                { model: 'NanoCell 50 inch', price: 40000 }
+                            ] }
+                    ] },
+                { name: 'Coolers', brands: [
+                        { name: 'Bajaj', logo: 'https://upload.wikimedia.org/wikipedia/commons/thumb/7/7e/Bajaj_Group_logo.svg/440px-Bajaj_Group_logo.svg.png', models: [
+                                { model: 'Desert Cooler 80L', price: 10000 },
+                                { model: 'Personal Cooler 20L', price: 5000 }
+                            ] },
+                        { name: 'Symphony', logo: 'https://shop.symphonylimited.com/cdn/shop/files/logo-new-header.png?v=1704892972', models: [
+                                { model: 'Diet 35T', price: 8000 },
+                                { model: 'HiCool Smart', price: 12000 }
+                            ] }
+                    ] },
+                { name: 'Washing Machines', brands: [
+                        { name: 'Samsung', logo: 'https://upload.wikimedia.org/wikipedia/commons/thumb/b/b7/Samsung_Black_icon.svg/520px-Samsung_Black_icon.svg.png', models: [
+                                { model: 'Front Load 8kg', price: 30000 },
+                                { model: 'Top Load 7kg', price: 20000 }
+                            ] },
+                        { name: 'LG', logo: 'https://www.lg.com/content/dam/lge/common/logo/logo-lg-100-44.svg', models: [
+                                { model: 'Front Load 9kg', price: 35000 },
+                                { model: 'Top Load 8kg', price: 25000 }
+                            ] }
+                    ] },
+                { name: 'Kitchen Appliances', brands: [
+                        { name: 'Prestige', logo: 'https://shop.ttkprestige.com/media/logo/stores/1/Prestige-Logo-PNG-HD.png', models: [
+                                { model: 'Induction Cooktop', price: 3000 },
+                                { model: 'Mixer Grinder', price: 4000 }
+                            ] },
+                        { name: 'Philips', logo: 'https://www.usa.philips.com/consumerfiles/newscenter/main/standard/resources/corporate/press/2013/Brand/Philips-Shield.jpg', models: [
+                                { model: 'Air Fryer', price: 8000 },
+                                { model: 'Food Processor', price: 7000 }
+                            ] }
+                    ] }
+            ]
+        }
+    };
+
+
+    function showSection(id) {
+        const sections = document.querySelectorAll('.main-container');
+        sections.forEach(section => section.classList.remove('active'));
+        const brandPages = document.querySelectorAll('.brand-page');
+        brandPages.forEach(page => page.classList.remove('active'));
+        document.getElementById('sub-category-list').style.display = 'none';
+
+        const selectedSection = document.getElementById(id);
+        if (selectedSection) {
+            selectedSection.classList.add('active');
+        }
+
+        if (id === 'cart') {
+            displayCartItems();
+        } else if (id === 'orderHistory') {
+            displayOrderHistory();
+        }
+    }
+
+    function showBrands(category) {
+        currentCategory = category;
+        document.getElementById('sub-category-list').style.display = 'none';
+        document.getElementById('brand-list').style.display = 'flex';
+        document.getElementById('brand-list').classList.add('active');
+        document.getElementById('model-list').classList.remove('active');
+
+        const brands = subCategoriesData[category].brands || [];
+        const brandListContainer = document.getElementById('brand-list');
+        brandListContainer.innerHTML = '';
+
+        brands.forEach(brand => {
+            const brandItem = document.createElement('div');
+            brandItem.className = 'brand-item';
+            brandItem.onclick = () => showModels(brand.name, category);
+            brandItem.innerHTML = `
+                <img src="${brand.logo}" alt="${brand.name}">
+                <h3>${brand.name}</h3>
+            `;
+            brandListContainer.appendChild(brandItem);
+        });
+    }
+
+    function showSubCategories(category) {
+        currentCategory = category;
+        document.getElementById('brand-list').classList.remove('active');
+        document.getElementById('model-list').classList.remove('active');
+        document.getElementById('sub-category-list').style.display = 'flex';
+
+        const subcats = subCategoriesData[category].subcategories || [];
+        const subCategoryListContainer = document.getElementById('sub-category-list');
+        subCategoryListContainer.innerHTML = '';
+
+        subcats.forEach(subcat => {
+            const subCategoryItem = document.createElement('div');
+            subCategoryItem.className = 'sub-category-item';
+            subCategoryItem.onclick = () => showBrandsForSubCategory(category, subcat.name);
+            subCategoryItem.innerHTML = `
+                <img src="https://via.placeholder.com/150?text=${subcat.name}" alt="${subcat.name}">
+                <h3>${subcat.name}</h3>
+            `;
+            subCategoryListContainer.appendChild(subCategoryItem);
+        });
+    }
+
+    function showBrandsForSubCategory(category, subCategoryName) {
+        currentSubCategory = subCategoryName;
+        document.getElementById('sub-category-list').style.display = 'none';
+        document.getElementById('brand-list').style.display = 'flex';
+        document.getElementById('brand-list').classList.add('active');
+        document.getElementById('model-list').classList.remove('active');
+        const subcategoryData = subCategoriesData[category].subcategories.find(sub => sub.name === subCategoryName);
+        const brands = subcategoryData.brands || [];
+        const brandListContainer = document.getElementById('brand-list');
+        brandListContainer.innerHTML = '';
+
+        brands.forEach(brand => {
+            const brandItem = document.createElement('div');
+            brandItem.className = 'brand-item';
+            brandItem.onclick = () => showModels(brand.name, category, subCategoryName);
+            brandItem.innerHTML = `
+                <img src="${brand.logo}" alt="${brand.name}">
+                <h3>${brand.name}</h3>
+            `;
+            brandListContainer.appendChild(brandItem);
+        });
+    }
+
+
+    function showModels(brandName, category, subCategoryName = null) {
+        document.getElementById('brand-list').classList.remove('active');
+        document.getElementById('model-list').style.display = 'flex';
+        document.getElementById('model-list').classList.add('active');
+
+        let modelsData;
+        if (category === 'mobiles') {
+            modelsData = subCategoriesData[category].brands.find(brand => brand.name === brandName).models;
+        } else {
+            const subcategory = subCategoriesData[category].subcategories.find(sub => sub.name === subCategoryName);
+            modelsData = subcategory.brands.find(brand => brand.name === brandName).models;
+        }
+
+        const modelListContainer = document.getElementById('model-list');
+        modelListContainer.innerHTML = '';
+
+        modelsData.forEach(model => {
+            const modelItem = document.createElement('div');
+            modelItem.className = 'brand-model-item';
+            modelItem.innerHTML = `
+                <h3>${brandName} ${model.model}</h3>
+                <p>Price: ₹${model.price}</p>
+                <button onclick="addToCart('${brandName} ${model.model}', ${model.price}, this)">Add to Cart</button>
+                <span class="add-to-cart-message">Added to cart</span>
+            `;
+            modelListContainer.appendChild(modelItem);
+        });
+    }
+
+
+    function addToCart(model, price, buttonElement) {
+        const existingItem = cart.find(item => item.model === model);
+        if (existingItem) {
+            existingItem.quantity += 1;
+        } else {
+            cart.push({ model: model, price: price, quantity: 1 });
+        }
+        updateCartDisplay();
+        showAddToCartMessage(buttonElement.nextElementSibling); // Show success message
+    }
+
+    function showAddToCartMessage(messageElement) {
+        messageElement.classList.add('active');
+        setTimeout(() => {
+            messageElement.classList.remove('active');
+        }, 1500); // Hide after 1.5 seconds
+    }
+
+    function updateCartDisplay() {
+        const cartItemsContainer = document.getElementById('cart-items');
+        const totalAmountElement = document.getElementById('total-amount');
+        cartItemsContainer.innerHTML = ''; // Clear existing cart display
+        let total = 0;
+
+        cart.forEach((item, index) => {
+            const cartItemDiv = document.createElement('div');
+            cartItemDiv.className = 'cart-item';
+            cartItemDiv.innerHTML = `
+                <p>${item.model} - ₹${item.price}</p>
+                <div style="display:flex; align-items: center;">
+                    <input type="number" value="${item.quantity}" min="1" onchange="updateQuantity(${index}, this.value)">
+                    <button onclick="removeItem(${index})">Remove</button>
+                </div>
+            `;
+            cartItemsContainer.appendChild(cartItemDiv);
+            total += item.price * item.quantity;
+        });
+
+        totalAmountElement.innerText = '₹ ' + total;
+    }
+
+    function updateQuantity(index, quantity) {
+        cart[index].quantity = parseInt(quantity);
+        updateCartDisplay();
+    }
+
+    function removeItem(index) {
+        cart.splice(index, 1);
+        updateCartDisplay();
+    }
+
+    function showCheckoutForm() {
+        if (cart.length === 0) {
+            alert("Your cart is empty. Please add items to checkout.");
+            return;
+        }
+        document.getElementById('checkoutFormSection').classList.add('active');
+        document.getElementById('proceed-checkout-btn').style.display = 'none'; // Hide checkout button once form is shown
+        document.getElementById('checkout-btn').innerText = 'Proceed to Payment'; // Change button text
+    }
+
+    document.getElementById('checkout-details-form').addEventListener('submit', function(event) {
+        event.preventDefault(); // Prevent default form submission
+        const name = document.getElementById('name').value;
+        const address = document.getElementById('address').value;
+        const pincode = document.getElementById('pincode').value;
+        const city = document.getElementById('city').value;
+
+        // Store user details and move to payment section
+        localStorage.setItem('customerDetails', JSON.stringify({ name, address, pincode, city }));
+        showSection('payment');
+    });
+
+
+    function processPayment(method) {
+        const paymentStatus = document.getElementById('payment-status');
+        const customerDetails = JSON.parse(localStorage.getItem('customerDetails'));
+        const totalAmount = document.getElementById('total-amount').innerText;
+
+        if (!customerDetails) {
+            paymentStatus.innerText = 'Error: Customer details are missing. Please go back to cart and proceed to checkout again.';
+            return;
+        }
+
+        // For simplicity, assume payment is always successful
+        paymentStatus.innerText = `Payment successful with ${method}! Order placed successfully.`;
+
+        // Record order in history
+        recordOrder(customerDetails, method, totalAmount, cart);
+
+        // Clear cart after successful order
+        cart = [];
+        updateCartDisplay();
+        localStorage.removeItem('customerDetails'); // Clear customer details after order
+    }
+
+    function recordOrder(customerDetails, paymentMethod, totalAmount, items) {
+        const order = {
+            orderId: Date.now(), // Unique order ID
+            customer: customerDetails,
+            paymentMethod: paymentMethod,
+            totalAmount: totalAmount,
+            items: [...items], // Copy cart items
+            orderDate: new Date().toLocaleDateString()
+        };
+        orderHistory.push(order);
+        localStorage.setItem('orderHistory', JSON.stringify(orderHistory)); // Store in localStorage
+    }
+
+    function displayOrderHistory() {
+        const orderHistoryList = document.getElementById('order-history-list');
+        orderHistoryList.innerHTML = ''; // Clear previous history
+
+        // Retrieve order history from localStorage
+        const storedOrderHistory = localStorage.getItem('orderHistory');
+        if (storedOrderHistory) {
+            orderHistory = JSON.parse(storedOrderHistory);
+        }
+
+        if (orderHistory.length === 0) {
+            orderHistoryList.innerHTML = '<p>No order history available.</p>';
+            return;
+        }
+
+        orderHistory.forEach(order => {
+            const orderItemDiv = document.createElement('div');
+            orderItemDiv.className = 'order-item';
+            let itemsListHTML = '<ul>';
+            order.items.forEach(item => {
+                itemsListHTML += `<li>${item.quantity} x ${item.model} - ₹${item.price} each</li>`;
+            });
+            itemsListHTML += '</ul>';
+
+            orderItemDiv.innerHTML = `
+                <h3>Order ID: ${order.orderId}</h3>
+                <p>Order Date: ${order.orderDate}</p>
+                <p>Customer Name: ${order.customer.name}</p>
+                <p>Payment Method: ${order.paymentMethod}</p>
+                <p>Total Amount: ${order.totalAmount}</p>
+                <p>Items:</p>
+                ${itemsListHTML}
+                <hr>
+            `;
+            orderHistoryList.appendChild(orderItemDiv);
+        });
+    }
+
+    // Initialize cart display on page load (if needed, e.g., restore from localStorage)
+    updateCartDisplay();
+</script>
+
+</body>
+</html>
